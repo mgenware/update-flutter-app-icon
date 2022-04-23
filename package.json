@@ -1,6 +1,6 @@
 {
   "name": "update-flutter-app-icon",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "CLI to update flutter project app icon (Android, iOS, Web, macOS)",
   "type": "module",
   "exports": "./dist/main.js",

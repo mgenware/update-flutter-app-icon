@@ -10,6 +10,7 @@ const androidDir = 'android/app/src/main/res';
 const iosDir = 'ios/Runner/Assets.xcassets/AppIcon.appiconset';
 const macosDir = 'macos/Runner/Assets.xcassets/AppIcon.appiconset';
 const webDir = 'web';
+const map = new Map<string, number>();
 
 function addAndroidEntry(dir: string, size: number) {
   map.set(np.join(androidDir, dir, 'ic_launcher.png'), size);
@@ -35,8 +36,6 @@ function log(s: unknown) {
 function logError(s: unknown) {
   return log(chalk.red(s));
 }
-
-const map = new Map<string, number>();
 
 function initMap() {
   addAndroidEntry('mipmap-hdpi', 72);

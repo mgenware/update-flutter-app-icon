@@ -22,4 +22,4 @@ CLI to update flutter project app icon (Android, iOS, Web, macOS).
 
 ## Known issues
 
-- Maskable icons for web are not supported. You have to manually replaces maskable icons in `web/icons`.
+- Maskable icons for web are not supported. You have to manually replace the maskable icons in `web/icons`.

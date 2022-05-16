@@ -5,12 +5,17 @@ import * as fs from 'fs';
 import chalk from 'chalk';
 import sharp from 'sharp';
 import errMsg from 'catch-err-msg';
+import toIco from 'to-ico';
 
 const androidDir = 'android/app/src/main/res';
 const iosDir = 'ios/Runner/Assets.xcassets/AppIcon.appiconset';
 const macosDir = 'macos/Runner/Assets.xcassets/AppIcon.appiconset';
 const webDir = 'web';
+const windowsDir = 'windows/runner/resources';
 const map = new Map<string, number>();
+
+const ICO_SP_SIZE = -1;
+const ICO_SIZES = [16, 24, 32, 48, 64, 128, 256];
 
 function addAndroidEntry(dir: string, size: number) {
   map.set(np.join(androidDir, dir, 'ic_launcher.png'), size);
@@ -26,6 +31,10 @@ function addMacOSEntry(size: number) {
 
 function addWebEntry(size: number) {
   map.set(np.join(webDir, 'icons', `Icon-${size}.png`), size);
+}
+
+function addWindowsEntry(file: string) {
+  map.set(np.join(windowsDir, file), ICO_SP_SIZE);
 }
 
 function log(s: unknown) {
@@ -68,6 +77,8 @@ function initMap() {
   addMacOSEntry(512);
   addMacOSEntry(1024);
 
+  addWindowsEntry('app_icon.ico');
+
   // Favicon.
   map.set(np.join(webDir, 'favicon.png'), 16);
   addWebEntry(192);
@@ -89,7 +100,14 @@ async function handleFile(src: string, dest: string, size: number, dryRun: boole
     if (dryRun) {
       return;
     }
-    await sharp(src).resize(size).toFile(dest);
+    if (size === ICO_SP_SIZE) {
+      // To .ico
+      const layers = await Promise.all(ICO_SIZES.map((sz) => sharp(src).resize(sz).toBuffer()));
+      await fs.promises.writeFile(dest, await toIco(layers));
+    } else {
+      // To .png
+      await sharp(src).resize(size).toFile(dest);
+    }
   } catch (err) {
     // eslint-disable-next-line no-console
     console.log(chalk.red(`Error converting file "${dest}": ${err}`));

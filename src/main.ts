@@ -105,14 +105,23 @@ function initMap() {
   osDict.set(OS.web, map);
 }
 
-async function handleFile(src: string, dest: string, size: number, dryRun: boolean) {
-  // Check if the file exists.
-  try {
-    await fs.promises.access(dest, fs.constants.F_OK);
-  } catch (_) {
-    // eslint-disable-next-line no-console
-    console.log(chalk.yellow(`Icon file missing: "${dest}"`));
-    return;
+async function handleFile(
+  src: string,
+  dest: string,
+  size: number,
+  dryRun: boolean,
+  // If true, create a new file if it doesn't exist.
+  newFile: boolean,
+) {
+  if (!newFile) {
+    // Check if the file exists.
+    try {
+      await fs.promises.access(dest, fs.constants.F_OK);
+    } catch (_) {
+      // eslint-disable-next-line no-console
+      console.log(chalk.red(`Icon file missing: "${dest}"`));
+      return;
+    }
   }
   try {
     // eslint-disable-next-line no-console
@@ -134,6 +143,14 @@ async function handleFile(src: string, dest: string, size: number, dryRun: boole
   }
 }
 
+function runMap(map: Map<string, number>, projectDir: string, iconFile: string, dryRun: boolean) {
+  return Promise.all(
+    Array.from(map).map(([dir, size]) =>
+      handleFile(iconFile, np.join(projectDir, dir), size, dryRun, false),
+    ),
+  );
+}
+
 async function runOS(os: OS, projectDir: string, iconFile: string, dryRun: boolean) {
   const map = osDict.get(os);
   if (!map) {
@@ -141,11 +158,7 @@ async function runOS(os: OS, projectDir: string, iconFile: string, dryRun: boole
   }
   // eslint-disable-next-line no-console
   console.log(chalk.yellow(`=== ${OS[os]} ===`));
-  await Promise.all(
-    Array.from(map).map(([dir, size]) =>
-      handleFile(iconFile, np.join(projectDir, dir), size, dryRun),
-    ),
-  );
+  await runMap(map, projectDir, iconFile, dryRun);
 }
 
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
@@ -160,7 +173,7 @@ async function runOS(os: OS, projectDir: string, iconFile: string, dryRun: boole
     --dry-run  Show the results but don't update any files.
   
   Examples
-    $ npx update-flutter-app-icon ./flutter_proj ./flutter_proj/res/app_logo.png
+    $ npx update-flutter-app-icon ./flutter_proj/updateIcons.json
   `,
       {
         importMeta: import.meta,
@@ -202,6 +215,21 @@ async function runOS(os: OS, projectDir: string, iconFile: string, dryRun: boole
     }
     if (config.web) {
       await runOS(OS.web, projectDir, resolveIconFile(config.web), dryRun);
+    }
+    if (config.raw && Array.isArray(config.raw)) {
+      // eslint-disable-next-line no-console
+      console.log(chalk.yellow('=== raw ==='));
+      await Promise.all(
+        config.raw.map((action) =>
+          handleFile(
+            resolveIconFile(action.icon),
+            np.resolve(projectDir, action.out),
+            action.size,
+            dryRun,
+            true,
+          ),
+        ),
+      );
     }
   } catch (err) {
     const message = errMsg(err);

@@ -1,3 +1,9 @@
+export interface RawAction {
+  icon: string;
+  out: string;
+  size: number;
+}
+
 export default interface Config {
   project?: string;
   ios?: string;
@@ -5,4 +11,5 @@ export default interface Config {
   web?: string;
   macos?: string;
   windows?: string;
+  raw?: RawAction[];
 }

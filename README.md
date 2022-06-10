@@ -1,6 +1,6 @@
 # update-flutter-app-icon
 
-CLI to update flutter project app icon (Android, iOS, Web, macOS).
+CLI to update flutter project app icons (Android, iOS, Web, macOS).
 
 ## Prerequisites
 
@@ -39,7 +39,7 @@ Create a JSON file, for example, `updateIcons.json` in your flutter project, and
 
 ## Raw actions
 
-If you would like to create new icons instead of replacing old ones, use raw actions. For example, I would like to create a 512x512 copy in asset folder for app about dialog:
+If you want to create new icons instead of replacing old ones, use raw actions. For example, I want to create a 512x512 copy in asset folder for app about dialog:
 
 ```json
 {
@@ -62,4 +62,4 @@ If you would like to create new icons instead of replacing old ones, use raw act
 
 ## Known issues
 
-- Maskable icons for web are not supported. You have to manually replace the maskable icons in `web/icons`.
+- Maskable icons for web are not supported. You can replace maskable icons in `web/icons` via raw actions mentioned above.

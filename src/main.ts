@@ -22,29 +22,35 @@ enum OS {
   web,
 }
 
-const osDict = new Map<OS, Map<string, number>>();
+interface ImageOptions {
+  size: number;
+  noAlphaChannel?: boolean;
+}
+
+const osDict = new Map<OS, Map<string, ImageOptions>>();
 
 const ICO_SP_SIZE = -1;
 const ICO_SIZES = [16, 24, 32, 48, 64, 128, 256];
 
-function addAndroidEntry(map: Map<string, number>, dir: string, size: number) {
-  map.set(np.join(androidDir, dir, 'ic_launcher.png'), size);
+function addAndroidEntry(map: Map<string, ImageOptions>, dir: string, opt: ImageOptions) {
+  map.set(np.join(androidDir, dir, 'ic_launcher.png'), opt);
 }
 
-function addIosEntry(map: Map<string, number>, name: string, size: number) {
-  map.set(np.join(iosDir, `Icon-App-${name}.png`), size);
+function addIosEntry(map: Map<string, ImageOptions>, name: string, opt: ImageOptions) {
+  // No alpha channels in iOS.
+  map.set(np.join(iosDir, `Icon-App-${name}.png`), { ...opt, noAlphaChannel: true });
 }
 
-function addMacOSEntry(map: Map<string, number>, size: number) {
-  map.set(np.join(macosDir, `app_icon_${size}.png`), size);
+function addMacOSEntry(map: Map<string, ImageOptions>, opt: ImageOptions) {
+  map.set(np.join(macosDir, `app_icon_${opt.size}.png`), opt);
 }
 
-function addWebEntry(map: Map<string, number>, size: number) {
-  map.set(np.join(webDir, 'icons', `Icon-${size}.png`), size);
+function addWebEntry(map: Map<string, ImageOptions>, opt: ImageOptions) {
+  map.set(np.join(webDir, 'icons', `Icon-${opt.size}.png`), opt);
 }
 
-function addWindowsEntry(map: Map<string, number>, file: string) {
-  map.set(np.join(windowsDir, file), ICO_SP_SIZE);
+function addWindowsEntry(map: Map<string, ImageOptions>, file: string) {
+  map.set(np.join(windowsDir, file), { size: ICO_SP_SIZE });
 }
 
 function log(s: unknown) {
@@ -57,58 +63,58 @@ function logError(s: unknown) {
 }
 
 function initMap() {
-  let map = new Map<string, number>();
-  addAndroidEntry(map, 'mipmap-hdpi', 72);
-  addAndroidEntry(map, 'mipmap-mdpi', 48);
-  addAndroidEntry(map, 'mipmap-xhdpi', 96);
-  addAndroidEntry(map, 'mipmap-xxhdpi', 144);
-  addAndroidEntry(map, 'mipmap-xxxhdpi', 192);
+  let map = new Map<string, ImageOptions>();
+  addAndroidEntry(map, 'mipmap-hdpi', { size: 72 });
+  addAndroidEntry(map, 'mipmap-mdpi', { size: 48 });
+  addAndroidEntry(map, 'mipmap-xhdpi', { size: 96 });
+  addAndroidEntry(map, 'mipmap-xxhdpi', { size: 144 });
+  addAndroidEntry(map, 'mipmap-xxxhdpi', { size: 192 });
   osDict.set(OS.android, map);
 
-  map = new Map<string, number>();
-  addIosEntry(map, '20x20@1x', 20);
-  addIosEntry(map, '20x20@2x', 40);
-  addIosEntry(map, '20x20@3x', 60);
-  addIosEntry(map, '29x29@1x', 29);
-  addIosEntry(map, '29x29@2x', 58);
-  addIosEntry(map, '29x29@3x', 87);
-  addIosEntry(map, '40x40@1x', 40);
-  addIosEntry(map, '40x40@2x', 80);
-  addIosEntry(map, '40x40@3x', 120);
-  addIosEntry(map, '60x60@2x', 120);
-  addIosEntry(map, '60x60@3x', 180);
-  addIosEntry(map, '76x76@1x', 76);
-  addIosEntry(map, '76x76@2x', 152);
-  addIosEntry(map, '83.5x83.5@2x', 167);
-  addIosEntry(map, '1024x1024@1x', 1024);
+  map = new Map<string, ImageOptions>();
+  addIosEntry(map, '20x20@1x', { size: 20 });
+  addIosEntry(map, '20x20@2x', { size: 40 });
+  addIosEntry(map, '20x20@3x', { size: 60 });
+  addIosEntry(map, '29x29@1x', { size: 29 });
+  addIosEntry(map, '29x29@2x', { size: 58 });
+  addIosEntry(map, '29x29@3x', { size: 87 });
+  addIosEntry(map, '40x40@1x', { size: 40 });
+  addIosEntry(map, '40x40@2x', { size: 80 });
+  addIosEntry(map, '40x40@3x', { size: 120 });
+  addIosEntry(map, '60x60@2x', { size: 120 });
+  addIosEntry(map, '60x60@3x', { size: 180 });
+  addIosEntry(map, '76x76@1x', { size: 76 });
+  addIosEntry(map, '76x76@2x', { size: 152 });
+  addIosEntry(map, '83.5x83.5@2x', { size: 167 });
+  addIosEntry(map, '1024x1024@1x', { size: 1024 });
   osDict.set(OS.ios, map);
 
-  map = new Map<string, number>();
-  addMacOSEntry(map, 16);
-  addMacOSEntry(map, 32);
-  addMacOSEntry(map, 64);
-  addMacOSEntry(map, 128);
-  addMacOSEntry(map, 256);
-  addMacOSEntry(map, 512);
-  addMacOSEntry(map, 1024);
+  map = new Map<string, ImageOptions>();
+  addMacOSEntry(map, { size: 16 });
+  addMacOSEntry(map, { size: 32 });
+  addMacOSEntry(map, { size: 64 });
+  addMacOSEntry(map, { size: 128 });
+  addMacOSEntry(map, { size: 256 });
+  addMacOSEntry(map, { size: 512 });
+  addMacOSEntry(map, { size: 1024 });
   osDict.set(OS.macos, map);
 
-  map = new Map<string, number>();
+  map = new Map<string, ImageOptions>();
   addWindowsEntry(map, 'app_icon.ico');
   osDict.set(OS.windows, map);
 
   // Favicon.
-  map = new Map<string, number>();
-  map.set(np.join(webDir, 'favicon.png'), 16);
-  addWebEntry(map, 192);
-  addWebEntry(map, 512);
+  map = new Map<string, ImageOptions>();
+  map.set(np.join(webDir, 'favicon.png'), { size: 16 });
+  addWebEntry(map, { size: 192 });
+  addWebEntry(map, { size: 512 });
   osDict.set(OS.web, map);
 }
 
 async function handleFile(
   src: string,
   dest: string,
-  size: number,
+  opt: ImageOptions,
   dryRun: boolean,
   // If true, create a new file if it doesn't exist.
   newFile: boolean,
@@ -125,17 +131,21 @@ async function handleFile(
   }
   try {
     // eslint-disable-next-line no-console
-    console.log(`${dest}`);
+    console.log(`${dest} [${JSON.stringify(opt)}]`);
     if (dryRun) {
       return;
     }
-    if (size === ICO_SP_SIZE) {
+    if (opt.size === ICO_SP_SIZE) {
       // To .ico
       const layers = await Promise.all(ICO_SIZES.map((sz) => sharp(src).resize(sz).toBuffer()));
       await fs.promises.writeFile(dest, await toIco(layers));
     } else {
       // To .png
-      await sharp(src).resize(size).toFile(dest);
+      let img = sharp(src).resize(opt.size);
+      if (opt.noAlphaChannel) {
+        img = img.flatten();
+      }
+      await img.toFile(dest);
     }
   } catch (err) {
     // eslint-disable-next-line no-console
@@ -143,10 +153,15 @@ async function handleFile(
   }
 }
 
-function runMap(map: Map<string, number>, projectDir: string, iconFile: string, dryRun: boolean) {
+function runMap(
+  map: Map<string, ImageOptions>,
+  projectDir: string,
+  iconFile: string,
+  dryRun: boolean,
+) {
   return Promise.all(
-    Array.from(map).map(([dir, size]) =>
-      handleFile(iconFile, np.join(projectDir, dir), size, dryRun, false),
+    Array.from(map).map(([dir, opt]) =>
+      handleFile(iconFile, np.join(projectDir, dir), opt, dryRun, false),
     ),
   );
 }
@@ -224,7 +239,7 @@ async function runOS(os: OS, projectDir: string, iconFile: string, dryRun: boole
           handleFile(
             resolveIconFile(action.icon),
             np.resolve(projectDir, action.out),
-            action.size,
+            { size: action.size },
             dryRun,
             true,
           ),

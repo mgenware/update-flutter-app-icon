@@ -30,26 +30,26 @@
     "update-flutter-app-icon": "./dist/main.js"
   },
   "devDependencies": {
-    "@types/mocha": "^10.0.1",
-    "@types/node": "^18.11.19",
-    "@types/to-ico": "^1.1.1",
-    "@typescript-eslint/eslint-plugin": "^5.27.1",
-    "@typescript-eslint/parser": "^5.27.1",
-    "daizong": "^0.25.7",
-    "eslint": "^8.17.0",
-    "eslint-config-mgenware": "^0.9.0",
-    "eslint-plugin-import": "^2.26.0",
-    "mgenware-tsconfig-node": "^14.1.0",
-    "mocha": "^10.0.0",
+    "@types/mocha": "^10.0.3",
+    "@types/node": "^20.8.9",
+    "@types/to-ico": "^1.1.2",
+    "@typescript-eslint/eslint-plugin": "^6.9.0",
+    "@typescript-eslint/parser": "^6.9.0",
+    "daizong": "^0.27.0",
+    "eslint": "^8.52.0",
+    "eslint-config-mgenware": "^0.10.0",
+    "eslint-plugin-import": "^2.29.0",
+    "mgenware-tsconfig-node": "^14.3.0",
+    "mocha": "^10.2.0",
     "source-map-support": "^0.5.21",
-    "typescript": "^4.7.3"
+    "typescript": "^5.2.2"
   },
   "dependencies": {
-    "@types/sharp": "^0.31.1",
+    "@types/sharp": "^0.32.0",
     "catch-err-msg": "^1.0.0",
-    "chalk": "^5.0.1",
-    "meow": "^11.0.0",
-    "sharp": "^0.31.3",
+    "chalk": "^5.3.0",
+    "meow": "^12.1.1",
+    "sharp": "^0.32.6",
     "to-ico": "^1.1.5"
   }
 }
